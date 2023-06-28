@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Babylon project</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="parameters">
+            <select name="room" id="room" onchange="getRoom()">
+                <option value="none" selected disabled hidden>Choose a room type</option>
+                <option value="cube">cube</option>
+                <option value="corner">corner</option>
+                <option value="side">side corner</option>
+                <!-- <option value="Uform">U form</option> -->
+            </select>
+            <br>
+            <div id="idwidth">
+                <label for="width">Width :</label>
+                <input type="text" id="width" placeholder="Enter the width of the room">
+            </div>
+            <div id="idlength">
+                <label for="length">length :</label>
+                <input type="text" id="length" placeholder="Enter the length of the room">
+            </div>
+            <div id="idheight">
+                <label for="height">height :</label>
+                <input type="text" id="height" placeholder="Enter the height of the room">
+            </div>
+            <div id="idwall1">
+                <label for="wall1">wall1 :</label>
+                <input type="text" id="wall1" placeholder="Enter the wall1 of the room">
+            </div>
+            <div id="idwall2">
+                <label for="wall2">wall2 :</label>
+                <input type="text" id="wall2" placeholder="Enter the wall2 of the room">
+            </div>
+            <div id="idwall3">
+                <label for="wall3">wall3 :</label>
+                <input type="text" id="wall3" placeholder="Enter the wall3 of the room">
+            </div>
+            <div id="idwall4">
+                <label for="wall4">wall4 :</label>
+                <input type="text" id="wall4" placeholder="Enter the wall4 of the room">
+            </div>
+            <div id="idwall5">
+                <label for="wall5">wall5 :</label>
+                <input type="text" id="wall5" placeholder="Enter the wall5 of the room">
+            </div>
+            <div id="idgrdTexture">
+                <label for="grdTexture">Upload texture for the ground</label>
+                <input type="file" name="grdTexture" id="grdTexture">
+            </div>
+            <div id="idwallTexture">
+                <label for="wallTexture">Upload texture for the walls</label>
+                <input type="file" name="wallTexture" id="wallTexture">
+            </div>
+
+            <button class="go" onclick="buildRoom(
+                    document.getElementById('room').value,
+                    parseInt(document.getElementById('width').value),
+                    parseInt(document.getElementById('length').value),
+                    parseInt(document.getElementById('height').value),
+                    parseInt(document.getElementById('wall1').value),
+                    parseInt(document.getElementById('wall2').value),
+                    parseInt(document.getElementById('wall3').value),
+                    parseInt(document.getElementById('wall4').value),
+                    parseInt(document.getElementById('wall5').value),
+                    document.getElementById('grdTexture').value,
+                    document.getElementById('wallTexture').value,
+
+                    )
+                ">GO !</button>
+        </div>
+        <div class="showcase">
+            <canvas id="renderCanvas"></canvas>
+            <div id="sideCornerPaint" style=" display: none">
+                <img src="./assets/Untitled-02.png" />
+            </div>
+            <div id="cornerPaint" style="display: none">
+                <img src="./assets/Untitled-03.png" />
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/earcut@2.2.3/dist/earcut.min.js">
+        import * as earcut from "earcut";
+            earcut = earcut;
+        </script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/earcut@2.2.3/dist/earcut.min.js"></script>
+    <script src="js/babylonjs/babylon.js"></script>
+
+    <script>
+        function getRoom() {
+            typeRoom = document.getElementById('room').value;
+            console.log('type room:', typeRoom);
+
+            var length = document.getElementById('idlength');
+            var width = document.getElementById('idwidth');
+            var height = document.getElementById('idheight');
+            var wall1 = document.getElementById('idwall1');
+            var wall2 = document.getElementById('idwall2');
+            var wall3 = document.getElementById('idwall3');
+            var wall4 = document.getElementById('idwall4');
+            var wall5 = document.getElementById('idwall5');
+            var grdTexture = document.getElementById('idgrdTexture');
+            var wallTexture = document.getElementById('idwallTexture');
+            var sideCornerPaint = document.getElementById('sideCornerPaint');
+            var cornerPaint = document.getElementById('cornerPaint');
+
+            switch (typeRoom) {
+                case 'cube':
+                    length.style.display = "block";
+                    width.style.display = "block";
+                    height.style.display = "block";
+                    wall1.style.display = "none";
+                    wall2.style.display = "none";
+                    wall3.style.display = "none";
+                    wall4.style.display = "none";
+                    wall5.style.display = "none";
+                    grdTexture.style.display = "block";
+                    wallTexture.style.display = "block";
+                    sideCornerPaint.style.display = "none";
+                    cornerPaint.style.display = "none";
+                    break;
+
+                case 'corner':
+                    length.style.display = "none";
+                    width.style.display = "none";
+                    height.style.display = "block";
+                    wall1.style.display = "none";
+                    wall2.style.display = "block";
+                    wall3.style.display = "block";
+                    wall4.style.display = "block";
+                    wall5.style.display = "block";
+                    grdTexture.style.display = "block";
+                    wallTexture.style.display = "block";
+                    sideCornerPaint.style.display = "none";
+                    cornerPaint.style.display = "block";
+                    break;
+
+                case 'side':
+                    length.style.display = "none";
+                    width.style.display = "none";
+                    height.style.display = "block";
+                    wall1.style.display = "block";
+                    wall2.style.display = "block";
+                    wall3.style.display = "block";
+                    wall4.style.display = "block";
+                    wall5.style.display = "none";
+                    grdTexture.style.display = "block";
+                    wallTexture.style.display = "block";
+                    sideCornerPaint.style.display = "block";
+                    cornerPaint.style.display = "none";
+                    break;
+
+            }
+
+        }
+
+        function buildRoom(typeRoom, W, L, H, W1, W2, W3, W4, W5, grdTexture, wallTexture) {
+            // document.getElementById('grdTexture').onchange = function () {
+            //     alert('Selected file: ' + this.value);
+            // };
+            var grdTexture = grdTexture.replace(/^.*[\\\/]/, '');
+            console.log('grdTexture=', grdTexture);
+
+
+            // document.getElementById('wallTexture').onchange = function () {
+            //     alert('Selected file: ' + this.value);
+            // };
+            var wallTexture = wallTexture.replace(/^.*[\\\/]/, '');
+            console.log('wallTexture=', wallTexture);
+
+            switch (typeRoom) {
+                case 'cube':
+                    generateCube(W, L, H, grdTexture, wallTexture);
+                    break;
+                case 'corner':
+                    generateCorner(H, W2, W3, W4, W5, grdTexture, wallTexture);
+                    break;
+                case 'side':
+                    generateSideCorner(H, W1, W2, W3, W4, grdTexture, wallTexture);
+                    break;
+
+            }
+
+        }
+    </script>
+
+    <script type="text/javascript" src="js/cube.js"></script>
+    <script type="text/javascript" src="js/corner.js"></script>
+    <script type="text/javascript" src="js/sideCorner.js"></script>
+    <script type="text/javascript" src="js/Uform.js"></script>
+
+</body>
+
+</html>
